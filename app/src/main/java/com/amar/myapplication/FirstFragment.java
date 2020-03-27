@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -39,7 +40,14 @@ public class FirstFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         Log.d(TAG, "onCreateView: Fragment One");
-        return inflater.inflate(R.layout.fragment_blank, container, false);
+        View view = inflater.inflate(R.layout.fragment_blank, container, false);
+        TextView textView = view.findViewById(R.id.tv_person);
+        Bundle arguments = getArguments();
+        if(arguments!=null) {
+            Person person = arguments.getParcelable("data");
+            textView.setText(person.getName() + "\n" + person.getAddress() + "\n" + person.getAge());
+        }
+        return view;
     }
 
     @Override

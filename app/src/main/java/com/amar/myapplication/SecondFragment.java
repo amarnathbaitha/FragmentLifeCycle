@@ -6,6 +6,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,14 +19,19 @@ import androidx.fragment.app.Fragment;
  */
 public class SecondFragment extends Fragment {
     public static final String TAG = "myTag";
+    private PassDataToActivity passDataToActivity;
     public SecondFragment() {
         // Required empty public constructor
     }
 
+    public interface PassDataToActivity{
+        void sendData(Person person);
+    }
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
            Log.e(TAG, "onAttach: Fragment  Two ");
+        passDataToActivity = (PassDataToActivity) context;
     }
 
     @Override
@@ -38,7 +45,27 @@ public class SecondFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
            Log.e(TAG, "onCreateView: Fragment Two");
-        return inflater.inflate(R.layout.fragment_second, container, false);
+        View view = inflater.inflate(R.layout.fragment_second, container, false);
+        final EditText etName = view.findViewById(R.id.et_name);
+        final EditText etAddress = view.findViewById(R.id.et_address);
+        final EditText etAge = view.findViewById(R.id.et_age);
+
+        Button button = view.findViewById(R.id.btn_submit);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String name = etName.getText().toString();
+                String address = etAddress.getText().toString();
+                int age = Integer.parseInt(etAge.getText().toString());
+                Person person = new Person();
+                person.setName(name);
+                person.setAddress(address);
+                person.setAge(age);
+                passDataToActivity.sendData(person);
+
+            }
+        });
+        return view;
     }
 
 

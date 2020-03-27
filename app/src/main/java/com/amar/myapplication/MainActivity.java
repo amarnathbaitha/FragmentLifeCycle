@@ -10,7 +10,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements SecondFragment.PassDataToActivity{
     private String TAG = "myTag";
 
     @Override
@@ -18,6 +18,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Log.e(TAG, "onCreate: activity");
+
+
+        SecondFragment secondFragment = new SecondFragment();
+        FragmentManager fragmentManager1 = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction1 = fragmentManager1.beginTransaction();
+        fragmentTransaction1.replace(R.id.fragment_two_container,secondFragment,secondFragment.getTag());
+        fragmentTransaction1.addToBackStack(null);
+        fragmentTransaction1.commit();
     }
 
     @Override
@@ -56,20 +64,21 @@ public class MainActivity extends AppCompatActivity {
         Log.e(TAG, "onDestroy: activity");
     }
 
-    public void addFragment(View view) {
+
+
+    public void replaceFragment(View view) {
+
+    }
+
+    @Override
+    public void sendData(Person person) {
         FirstFragment firstFragment = new FirstFragment();
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("data",person);
+        firstFragment.setArguments(bundle);
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.add(R.id.fragment_one_container,firstFragment,firstFragment.getTag());
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
-    }
-
-    public void replaceFragment(View view) {
-        SecondFragment secondFragment = new SecondFragment();
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_one_container,secondFragment,secondFragment.getTag());
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
